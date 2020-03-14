@@ -1,7 +1,8 @@
 from django.db.models import Q
-from django.urls import reverse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from webapp.forms import SimpleSearchForm
 from webapp.models import File
@@ -69,3 +70,32 @@ class FileCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('webapp:index')
+
+
+class FileUpdateView(UpdateView):
+    model = File
+    template_name = 'file_update.html'
+    # form_class = TaskForm
+    context_object_name = 'obj'
+    fields = ['name', 'file']
+
+    def get_success_url(self):
+        return reverse('webapp:file_detail', kwargs={'pk': self.object.pk})
+
+
+class FileDeleteView(DeleteView):
+    template_name = 'file_delete.html'
+    model = File
+    context_object_name = 'obj'
+    success_url = reverse_lazy('webapp:index')
+
+    # def test_func(self):
+    #     project = self.get_project()
+    #     print(self.request.user)
+    #     users = User.objects.filter(team_user__projects=project)
+    #     if self.request.user in users:
+    #         return True
+    #     return False
+
+    # def get_project(self):
+    #     return get_object_or_404(File, pk=self.kwargs.get('pk'))

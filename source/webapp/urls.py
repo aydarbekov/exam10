@@ -1,7 +1,7 @@
 from django.urls import path
 
 from webapp.views import IndexView
-from webapp.views.files_views import FileDetailView, FileCreateView
+from webapp.views.files_views import FileDetailView, FileCreateView, FileUpdateView, FileDeleteView
 
 app_name = 'webapp'
 
@@ -9,6 +9,8 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('file/<int:pk>/', FileDetailView.as_view(), name='file_detail'),
     path('file/create/', FileCreateView.as_view(), name='file_create'),
+    path('file/<int:pk>/update/', FileUpdateView.as_view(), name='file_update'),
+    path('file/<int:pk>/delete/', FileDeleteView.as_view(), name='file_delete'),
 
     # path('committee/create/', CommitteeCreateView.as_view(), name='committee_create'),
     # path('university/', UniversityIndexView.as_view(), name='university'),

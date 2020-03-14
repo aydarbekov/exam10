@@ -6,8 +6,8 @@
 {#        <li><a href="{% url 'webapp:photo_delete' photo.pk %}">Delete</a></li>#}
 {#    {% endif %}#}
 {#    {% if request.user.is_authenticated and request.user.team_user.project == task.project.pk%}#}
-{#        <li><a href="{% url 'webapp:task_update' task.pk %}">Edit</a></li>#}
-{#        <li><a href="{% url 'webapp:task_delete' task.pk %}">Delete</a></li>#}
+        <li class="nav-item active"><a class="nav-link" href="{% url 'webapp:file_update' file.pk %}">Edit</a></li>
+        <li class="nav-item active"><a class="nav-link" href="{% url 'webapp:file_delete' file.pk %}">Delete</a></li>
 {#    {% endif %}#}
 {% endblock %}
 {% block content %}

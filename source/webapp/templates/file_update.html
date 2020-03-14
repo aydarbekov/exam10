@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Update Task{% endblock %}
+{% block menu %}
+    <li><a href="{% url 'webapp:file_detail' obj.pk %}">View</a></li>
+{% endblock %}
+{% block content %}
+    <h1>Изменение файла</h1>
+    <form method="POST" action="{% url "webapp:file_update" obj.pk %}">
+        {% include 'partial/task_form.html' %}
+        <input type="submit" value="Изменить" class="btn btn-primary">
+    </form>
+{% endblock %}
