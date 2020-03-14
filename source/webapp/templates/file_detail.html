@@ -21,12 +21,26 @@
         <a href="{{ file.file.url }}" class="btn btn-primary">Скачать</a>
         <div>Автор: {% if file.author %}{{ file.author }}{% else %}Аноним{% endif %}</div>
         <div>Создано: {{ file.creation_date }}</div>
+        <div>Создано: {{ file.type }}</div>
         <hr/>
 {#       <button id="{{photo.id}}" onclick="like(1)">Like</button>#}
-        <hr/>
-        <hr/>
-
    </div>
+    {% if file.type == 'private' %}
+        <h2>Пользователи имеющие доступ</h2>
+        {% for user in file.access_users.all %}
+                <p><a href="{% url 'accounts:user_detail' user.pk %}">{{ user }}</a></p>
+        {% empty %}
+            <p>No users yet.</p>
+        {% endfor %}
+        <form>
+          <div class="form-group">
+            <label for="user_add">Добавить пользователя</label>
+            <textarea class="form-control" id="user_add"></textarea>
+          </div>
+        </form>
+        <button id="create" type="button" class="btn btn-primary" onclick="addUserLoadIndex($('#user_add').val(), `{{ file.id }}`)" >Добавить</button>
+    {% endif %}
+
 {#    <div class="comment-list">#}
 {#        <h2>Comments</h2>#}
 {#        {% for comment in comments %}#}

@@ -18,12 +18,14 @@
          {% include 'partial/pagination.html' %}
     {% endif %}
         {% for file in files %}
-            <a href="{% url 'webapp:file_detail' file.pk %}">{{ file.name }}</a>
-            <div>Автор: {{ file.author }}
-            <div>Создано: {{ file.creation_date }}</div>
-            <a href="{{ file.file.url }}" class="btn btn-primary">Скачать</a>
-
-            <hr/>
+            {% if file.type == 'general' or file.author == request.user %}
+                <a href="{% url 'webapp:file_detail' file.pk %}">{{ file.name }}</a>
+                <div>Автор: {{ file.author }}
+                <div>Создано: {{ file.creation_date }}</div>
+                <a href="{{ file.file.url }}" class="btn btn-primary">Скачать</a>
+                <p>{{ file.type }}</p>
+                <hr/>
+            {% endif %}
         {% empty %}
             <p>No files yet.</p>
         {% endfor %}

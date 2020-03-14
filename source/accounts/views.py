@@ -20,6 +20,8 @@ class UserDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # context['form'] = TaskForm()
         files = context['user_obj'].file.order_by('-creation_date')
+
+        # print(files.objects.filter(type='general'))
         # print(files)
         self.paginate_files_to_context(files, context)
         return context

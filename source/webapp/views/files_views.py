@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from webapp.forms import SimpleSearchForm
+from webapp.forms import SimpleSearchForm, FileForm, FileFormFull, FileFormFullFull
 from webapp.models import File
 
 
@@ -32,9 +32,11 @@ class IndexView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.search_value:
-            query = Q(name__icontains=self.search_value)
+            query = Q(name__icontains=self.search_value, type='general')
             queryset = queryset.filter(query)
-        return queryset
+            return queryset
+        else:
+            return queryset.filter(type='general')
 
     def get_search_form(self):
         return SimpleSearchForm(self.request.GET)
@@ -44,10 +46,14 @@ class IndexView(ListView):
             return self.form.cleaned_data['search']
         return None
 
-class FileDetailView(DetailView):
+class FileDetailView(UserPassesTestMixin, DetailView):
     template_name = 'file_detail.html'
     pk_url_kwarg = 'pk'
     model = File
+
+    def test_func(self):
+        if (self.get_object().type == 'private' and self.request.user in self.get_object().access_users.all()) or self.get_object().author == self.request.user or self.get_object().type == 'general' or self.request.user.has_perm('file_view'):
+            return True
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -62,15 +68,23 @@ class FileCreateView(CreateView):
     template_name = 'file_create.html'
     model = File
     # form_class = PhotoForm
-    fields = ['name', 'file']
+    # fields = ['name', 'file', 'type']
+
+    def get_form_class(self):
+        if str(self.request.user) == 'AnonymousUser':
+            return FileForm
+        else:
+            return FileFormFull
 
     def form_valid(self, form):
         if str(self.request.user) != 'AnonymousUser':
             form.instance.author = self.request.user
+            # self.object = form.save()
+            # form.instance.access_users.add(self.request.user)
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('webapp:index')
+        return reverse('webapp:file_detail', kwargs={'pk': self.object.pk})
 
 
 class FileUpdateView(UserPassesTestMixin, UpdateView):
@@ -78,7 +92,13 @@ class FileUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'file_update.html'
     # form_class = TaskForm
     context_object_name = 'obj'
-    fields = ['name', 'file']
+    # fields = ['name', 'file', 'type', 'access_users']
+
+    def get_form_class(self):
+        if self.get_object().type == 'private':
+            return FileFormFullFull
+        else:
+            return FileFormFull
 
     def test_func(self):
         if self.request.user.has_perm('file_change') or self.get_object().author == self.request.user:
