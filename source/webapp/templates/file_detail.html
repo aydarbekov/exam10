@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}File{% endblock %}
+{% block menu %}
+{#    {% if request.user.is_authenticated %}#}
+{#        <li><a href="{% url 'webapp:photo_update' photo.pk %}">Edit</a></li>#}
+{#        <li><a href="{% url 'webapp:photo_delete' photo.pk %}">Delete</a></li>#}
+{#    {% endif %}#}
+{#    {% if request.user.is_authenticated and request.user.team_user.project == task.project.pk%}#}
+{#        <li><a href="{% url 'webapp:task_update' task.pk %}">Edit</a></li>#}
+{#        <li><a href="{% url 'webapp:task_delete' task.pk %}">Delete</a></li>#}
+{#    {% endif %}#}
+{% endblock %}
+{% block content %}
+   <div class="container">
+       <p>{{ file.name }}</p>
+        <a href="{{ file.file.url }}" class="btn btn-primary">Скачать</a>
+        <div>Автор: {% if file.author %}{{ file.author }}{% else %}Аноним{% endif %}</div>
+        <div>Создано: {{ file.creation_date }}</div>
+        <hr/>
+{#       <button id="{{photo.id}}" onclick="like(1)">Like</button>#}
+        <hr/>
+        <hr/>
+
+   </div>
+{#    <div class="comment-list">#}
+{#        <h2>Comments</h2>#}
+{#        {% for comment in comments %}#}
+{#            <div class="comment">#}
+{#                <p>{{ comment.author }} commented at {{ comment.created_at|date:'d.m.Y H:i:s' }}</p>#}
+{#                <div class="pre">{{ comment.text }}</div>#}
+{#            <button id="{{ comment.id }}" onclick="deleteTasksLoadIndex(this.id)" >Delete</button>#}
+{#            </div>#}
+{#        {% empty %}#}
+{#            <p>No comments yet.</p>#}
+{#        {% endfor %}#}
+{##}
+{#    </div>#}
+{#    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">#}
+{#  Создать комментарий#}
+{#</button>#}
+{##}
+{#<!-- Modal -->#}
+{#<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+{#  <div class="modal-dialog" role="document">#}
+{#    <div class="modal-content">#}
+{#      <div class="modal-header">#}
+{#        <h5 class="modal-title" id="exampleModalLabel">Создание комментария</h5>#}
+{#        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#          <span aria-hidden="true">&times;</span>#}
+{#        </button>#}
+{#      </div>#}
+{#      <div class="modal-body">#}
+{#                <form>#}
+{#                  <div class="form-group">#}
+{#                    <label for="text">Текст</label>#}
+{#                    <textarea class="form-control" id="text" rows="3"></textarea>#}
+{#                  </div>#}
+{#                </form>#}
+{#      </div>#}
+{#      <div class="modal-footer">#}
+{#        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+{#        <button id="create" type="button" class="btn btn-primary" onclick="createTasksLoadIndex($('#text').val(), `{{ user }}`, `{{ photo.id }}`)" >Сохранить</button>#}
+{#      </div>#}
+{#        `{{ user }}`#}
+{#        $('#text').val()#}
+{##}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+{% endblock %}

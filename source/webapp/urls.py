@@ -1,11 +1,15 @@
 from django.urls import path
 
 from webapp.views import IndexView
+from webapp.views.files_views import FileDetailView, FileCreateView
 
 app_name = 'webapp'
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
+    path('file/<int:pk>/', FileDetailView.as_view(), name='file_detail'),
+    path('file/create/', FileCreateView.as_view(), name='file_create'),
+
     # path('committee/create/', CommitteeCreateView.as_view(), name='committee_create'),
     # path('university/', UniversityIndexView.as_view(), name='university'),
     # path('university/add/', UniversityCreateView.as_view(), name='university_create'),

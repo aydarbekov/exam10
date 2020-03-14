@@ -22,22 +22,23 @@
               <li class="nav-item active">
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
               </li>
+                {% block menu %}{% endblock %}
               <li class="nav-item">
                 <a class="nav-link" href="#">Features</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Pricing</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Dropdown link
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-              </li>
+                <li class="menu-right">
+                    <ul>
+                        {% if request.user.is_authenticated %}
+                            <li>Привет, {{ request.user }}!</li>
+                            <li><a href="{% url 'accounts:logout'  %}">Выйти</a></li>
+                        {% else %}
+                            <li><a href="{% url 'accounts:login'  %}">Войти</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
             </ul>
           </div>
         </nav>
