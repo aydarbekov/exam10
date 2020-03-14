@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -72,22 +73,31 @@ class FileCreateView(CreateView):
         return reverse('webapp:index')
 
 
-class FileUpdateView(UpdateView):
+class FileUpdateView(UserPassesTestMixin, UpdateView):
     model = File
     template_name = 'file_update.html'
     # form_class = TaskForm
     context_object_name = 'obj'
     fields = ['name', 'file']
 
+    def test_func(self):
+        if self.request.user.has_perm('file_change') or self.get_object().author == self.request.user:
+            return True
+
     def get_success_url(self):
         return reverse('webapp:file_detail', kwargs={'pk': self.object.pk})
 
 
-class FileDeleteView(DeleteView):
+class FileDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'file_delete.html'
     model = File
     context_object_name = 'obj'
     success_url = reverse_lazy('webapp:index')
+
+    def test_func(self):
+        if self.request.user.has_perm('file_change') or self.get_object().author == self.request.user:
+            return True
+
 
     # def test_func(self):
     #     project = self.get_project()

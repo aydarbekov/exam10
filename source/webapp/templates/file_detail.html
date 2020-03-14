@@ -5,10 +5,15 @@
 {#        <li><a href="{% url 'webapp:photo_update' photo.pk %}">Edit</a></li>#}
 {#        <li><a href="{% url 'webapp:photo_delete' photo.pk %}">Delete</a></li>#}
 {#    {% endif %}#}
-{#    {% if request.user.is_authenticated and request.user.team_user.project == task.project.pk%}#}
+    {% if perms.webapp.change_file or file.author == request.user %}
+{#        <p>{{ perms.webapp.change_file }}</p>#}
+{#        <p>{{ file.author }}</p>#}
+{#        <p>{{ request.user }}</p>#}
         <li class="nav-item active"><a class="nav-link" href="{% url 'webapp:file_update' file.pk %}">Edit</a></li>
-        <li class="nav-item active"><a class="nav-link" href="{% url 'webapp:file_delete' file.pk %}">Delete</a></li>
-{#    {% endif %}#}
+    {% endif %}
+    {% if perms.webapp.delete_file or file.author == request.user %}
+            <li class="nav-item active"><a class="nav-link" href="{% url 'webapp:file_delete' file.pk %}">Delete</a></li>
+    {% endif %}
 {% endblock %}
 {% block content %}
    <div class="container">
